@@ -7,6 +7,7 @@ import { useGeolocation } from '../hooks/useGeolocation';
 import Button from './Button';
 import styles from './Map.module.css'
 import { useUrlPosition } from '../hooks/useUrlPosition';
+import Flag from './Flag';
 
 function UpdateCenter  ({position}) {
   const map = useMap()
@@ -29,17 +30,14 @@ function NavigateToForm() {
 
 }
 export default function Map() {
-  const { state , handleUpdatePosition , handleMoveToYourPosition ,flag    } = useAppContext()
+  const { state , handleUpdatePosition , handleMoveToYourPosition     } = useAppContext()
   const [lat, lng] = useUrlPosition()
-
-
     const navigate = useNavigate()
   const {position,loading,error, getPosition} = useGeolocation()
   useEffect(() => {
-    if (lat && lng) {
+    if (!lat && !lng) return
       
       handleUpdatePosition([lat , lng])
-    }
   }, [lat, lng])
     useEffect(() => {
     if (position) {
@@ -48,7 +46,7 @@ export default function Map() {
       navigate(`form?lat=${position.lat}&lng=${position.lng}`)
 
     }
-  }, [position])
+  }, [position ])
   return <div className={styles.parentMap}>
     {error && !loading && <p style={{ color: "red" }}>{error}</p>}
     {!position && <Button onClick={getPosition} className={`btn btn-green`}>{loading ? "loading..." : "Get Your Location"}</Button>}
@@ -62,11 +60,10 @@ export default function Map() {
       />
         {
         state.cities && state.cities.map((city, index) => {
-            const flagText = flag(city.emoji)
 
             return   <Marker position={[city.position["lat"] , city.position["lng"]]} key={index}>
             <Popup >
-                <span><img src={`https://flagcdn.com/24x18/${flagText}.png`} alt={`flag ${flagText}`} /></span>
+      <Flag flagInfo={city.emoji} />
 <h3 >{city.cityName}</h3>
       </Popup>
     </Marker>

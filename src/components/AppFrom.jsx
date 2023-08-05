@@ -6,9 +6,10 @@ import Loading from './Loading'
 import { URL } from '../services/constant'
 import { useUrlPosition } from '../hooks/useUrlPosition'
 import axios from 'axios'
+import Flag from './Flag'
 
 export default function AppFrom() {
-    const { state , handleBack , handleChangeInputMapForm ,handleAddNewCities , handleChangeInputMapFormWhenClick , flag} = useAppContext()
+    const { state , handleBack , handleChangeInputMapForm ,handleAddNewCities , handleChangeInputMapFormWhenClick } = useAppContext()
       const [errorCoordinates, setErrorCoordinates] = useState("") 
     const [lat , lng ] = useUrlPosition()
     const fetchData = async (lat , lng) => {
@@ -37,7 +38,7 @@ export default function AppFrom() {
   } 
 
     useEffect(() => {
-        if(!lat && !lng) return
+      if (!lat && !lng) return
         fetchData(lat , lng)
         
     }, [lat, lng])
@@ -47,7 +48,6 @@ export default function AppFrom() {
         
     }
 
-    const flagText = flag(state.emoji)
     return (
         <>
             {state.loading && !state.error && <Loading />}
@@ -60,8 +60,8 @@ export default function AppFrom() {
               <label htmlFor="cityName">City name</label>
                         <div className={styles.AppFromFlag}>
               <input type="text" name="cityName" id="cityName"  value={state.cityName } onChange={handleChangeInputMapForm} maxLength={50}/>
-                <span><img src={`https://flagcdn.com/24x18/${flagText}.png`} alt={`flag ${flagText}`} /></span>
-                        </div>
+                <Flag flagInfo={state.emoji} />       
+              </div>
                                            <label htmlFor="date">When did you go to {state.cityName}?</label>
                         <input type="datetime-local" name="date" id="date" value={state.date} onChange={handleChangeInputMapForm} />
                         
@@ -69,8 +69,8 @@ export default function AppFrom() {
                         <label htmlFor="notes">Notes about your trip to {state.cityName}</label>
               <textarea htmlFor="id" name="notes" cols="30" rows="5" value={state.notes} onChange={handleChangeInputMapForm}></textarea>
               <div className={styles.btns}>
-                  <Button className='btn btn-green'>ADD</Button>
-                  <Button className='btn btn-back' onClick={(e)=>handleBack(e,"/app")}>&larr; Back</Button>
+                  <Button type='green'>ADD</Button>
+                  <Button type='back' onClick={(e)=>handleBack(e,"/app/cities")}>&larr; Back</Button>
               </div>
           </form>
     </div>

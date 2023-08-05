@@ -4,3 +4,34 @@
   grid-template-columns: 55rem auto;
   position: relative;
 }
+@media screen and (max-width: 20em) {
+    .AppLayout {
+        grid-template-columns: 1fr;
+    
+        grid-template-rows: 40rem auto;
+      }
+}
+
+@media screen and (min-width: 20em) and (max-width: 40em) {
+  .AppLayout {
+      grid-template-columns: 1fr;
+
+      grid-template-rows: 40rem auto;
+  }
+
+
+}
+@media screen and (min-width: 40em) and (max-width: 60em) {
+
+ .AppLayout {
+   grid-template-columns: 40rem auto;
+ }
+}
+
+@media screen and (min-width: 60em) and (max-width: 80em) {
+
+
+  .AppLayout {
+    grid-template-columns: 50rem auto;
+  }}
+

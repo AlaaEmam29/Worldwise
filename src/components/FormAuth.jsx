@@ -14,14 +14,14 @@ export default function FormAuth({ inputs , onSubmit , status , onChange}) {
       {status === 'register' && <>
       
       <p> Already have account ? &nbsp;  <NavLink to="/login" >Sign in</NavLink></p>
-              <Button className='btn btn-green '>Register</Button>
+              <Button type='green '>Register</Button>
       
       </>
       }
        {status === 'login' && <>
       
       <p> No Account ? &nbsp;  <NavLink to="/register" >Sign up</NavLink></p>
-              <Button className='btn btn-green '>Login</Button>
+              <Button type='green '>Login</Button>
       
       </>
 }

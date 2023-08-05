@@ -12,7 +12,7 @@ export default function User() {
       {state.user ? <>
       <img src={state?.user?.photoURL ? state?.user?.photoURL : "https://emedia1.nhs.wales/HEIW2/cache/file/F4C33EF0-69EE-4445-94018B01ADCF6FD4_medium.png" } alt="" />
           <p>Welcome , {state?.user?.displayName }</p>
-<Button className='btn btn-green' onClick={handleLogOut}>LogOut</Button></> : <p>Loading</p>}
+<Button type='green' onClick={handleLogOut}>LogOut</Button></> : <p>Loading</p>}
       </div>
   )
 }

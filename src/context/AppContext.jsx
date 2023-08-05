@@ -37,7 +37,10 @@ const initType = {
     updatePosition: "updatePosition",
     moveToYourLocation: "moveToYourLocation",
     clearForm: "clearForm",
-    addCitiesToUser: "addCitiesToUser",
+      addCitiesToUser: "addCitiesToUser",
+        addNewCityToUser: "addNewCityToUser",
+        deleteCityFromUser: "deleteCityFromUser",
+
     logout : "logout"
 }
 const reducer = (state, action) => {
@@ -81,14 +84,24 @@ const reducer = (state, action) => {
                 ...state,
     cityName: "",
     notes: "",
-  // emoji: "",
     country: "",
             }
         case initType.addCitiesToUser:
             return {
                 ...state,
                 cities :action.payload
-            }
+        }
+      case initType.addNewCityToUser:
+        return {
+          ...state,
+                currentCity : action.payload
+        }
+        
+          case initType.deleteCityFromUser:
+        return {
+          ...state,
+            currentCity : {}
+        }
          case initType.logout:
             return {
                 ...state,
@@ -148,14 +161,14 @@ export const AppContextProvider = ({ children }) => {
     } else {
       dispatch({ type: initType.loading, payload: true });
     }
-  }, [authState.user?.uid]);
+  }, [authState.user?.uid ]);
 
 
     
    
     const handleBack = (e , path) => {
         e.preventDefault()
-        navigate(path)
+        navigate(path ,  {replace :true})
         
     }
   const handleChangeInputMapForm = (e) => {
@@ -164,7 +177,10 @@ export const AppContextProvider = ({ children }) => {
   const handleChangeInputMapFormWhenClick = (state , value) => {
         dispatch({type : state , payload:value})
     }
-    const getCurrentCity = (id) => {
+  const getCurrentCity = (id) => {
+    console.log(id , state.currentCity.id)
+    if (id === state.currentCity.id) return
+    
         const city = state.cities.find((city) => city.id === id)
         dispatch({type : initType.currentCity , payload:city})
 
@@ -207,13 +223,13 @@ export const AppContextProvider = ({ children }) => {
         const newPosition = `${newCity.position.lat}-${newCity.position.lng}`;
 
         if (uniqueCitiesPos.has(newPosition)) {
-          alert( `${cityName} is already exist in your list`);
+  alert(`The place with latitude ${newCity.position.lat} and longitude ${newCity.position.lng} already exists in your list.`);
         }
         else {
-          
           await firebase.doAddToFirestore("cities", newCity);
+          dispatch({ type: initType.addNewCityToUser , payload : newCity })
           dispatch({ type: initType.clearForm })
-          navigate("/app")
+          navigate("/app" , {replace : true})
         }
 
       }
@@ -248,6 +264,7 @@ dispatch({ type: initType.error, payload: "Something went wrong when you tried t
 
     try {
       await firebase.doDeleteDataFromFirestore("cities", id)
+      dispatch({type : initType.deleteCityFromUser , payload : id})
     }
     catch (error) {
       console.log(error)
@@ -273,3 +290,4 @@ const formattedFullDate = (date) => moment(date).format("dddd, MMMM DD YYYY")
 export const useAppContext = () => {
     return useContext(AppContext)
 }
+

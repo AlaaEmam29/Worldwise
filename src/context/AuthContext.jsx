@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router";
 import * as Yup from 'yup';
 import { useFirebaseContext } from "./FirebaseContext";
-import bcrypt from 'bcryptjs';
 
 const AuthContext = createContext()
 const initState = {
@@ -28,7 +27,7 @@ const initType = {
     restRegisterSuccessful: "restRegisterSuccessful",
     clearForm: "clearForm",
     errorFirebase : "errorFirebase"
-}//    const hashedPassword = await bcrypt.hash(password, 10);
+}
 
 const reducer = (state, action) => {
     switch (action.type) {

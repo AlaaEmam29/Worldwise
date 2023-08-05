@@ -3,7 +3,6 @@ import logo from '../assets/images/logo.png'
 import styles from './MainNav.module.css'
 import Button from './Button'
 import { useAuthContext } from '../context/AuthContext'
-import { useAppContext } from '../context/AppContext'
 export default function MainNav() {
     const { state } = useAuthContext()
   return (
@@ -25,7 +24,7 @@ export default function MainNav() {
               </li>
               {!state.user && <li>
                      <NavLink to='/login'>
-                  <Button className="btn btn-green">
+                  <Button type="green">
                       Login
                   </Button>
               </NavLink>
