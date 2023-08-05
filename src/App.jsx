@@ -21,11 +21,11 @@ export default function App() {
 
   const isApp = location.pathname.includes("app")
   useEffect(() => {
-    //   const userID = localStorage.getItem("userID")
-    // if (userID) {
-    //   navigate("/app/cities")
+      const userID = localStorage.getItem("userID")
+    if (userID) {
+      navigate("/app/cities")
   
-    //   }
+      }
     
   }, [])
   
