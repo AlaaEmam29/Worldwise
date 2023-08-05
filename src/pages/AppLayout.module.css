@@ -1,0 +1,6 @@
+.AppLayout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 55rem auto;
+  position: relative;
+}

@@ -1,0 +1,23 @@
+.productpage {
+  background-color: var(--color-dark--1);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.productpage .img {
+  width: 100%;
+  height: 100%;
+}
+.productpage .rowGap {
+  gap: 5rem;
+}
+.productpage .col-product {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.productpage .col-product p {
+  margin-top: 0.2rem;
+}

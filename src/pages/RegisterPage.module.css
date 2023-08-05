@@ -1,0 +1,11 @@
+.registerPage {
+  background-color: var(--color-dark--1);
+  height: 100vh;
+  position: relative;
+}
+.registerPage .authform {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 7%;
+}

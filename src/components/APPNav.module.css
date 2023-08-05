@@ -1,0 +1,30 @@
+.nav{
+    width:47%;
+}
+.nav ul {
+    border-radius: 5px;
+        display: flex;
+            align-items: center;
+            justify-content: space-between;
+            list-style: none;
+            background-color: var(--color-dark--1);
+                padding: 0.25rem;
+                
+        }
+      
+.nav a:link,
+.nav a:visited {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border-radius: 7px;
+    text-align: center;
+}
+.nav a:global(.active) {
+    background-color: var(--color-dark--0);
+}

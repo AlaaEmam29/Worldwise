@@ -1,0 +1,21 @@
+.notfound {
+  width: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+.notfound h1 {
+  font-size: 7rem;
+  color: var(--color-light--3);
+}
+.notfound p {
+  font-size: 3rem;
+}
+.notfound .btn-green {
+  margin-top: 3rem;
+}

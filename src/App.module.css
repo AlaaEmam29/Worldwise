@@ -1,0 +1,9 @@
+.main {
+  background-color: var(--color-dark--0);
+  height: 100vh;
+
+}
+.main-m{
+  margin: 2rem;
+  height: calc(100vh - 4rem);
+}
