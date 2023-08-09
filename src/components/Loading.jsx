@@ -1,8 +1,8 @@
-import React from 'react'
-import BarLoader  from "react-spinners/BarLoader";
+import React, { memo } from 'react';
+import BarLoader from 'react-spinners/BarLoader';
 
-export default function Loading() {
-  return (
-  <BarLoader  color="#00c46a" />
-  )
-}
+const Loading = () => {
+  return <BarLoader color="#00c46a" />;
+};
+
+export default memo(Loading);

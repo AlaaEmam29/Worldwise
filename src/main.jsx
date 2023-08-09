@@ -6,6 +6,7 @@ import { FirebaseContextProvider } from './context/FirebaseContext.jsx'
 import { AppContextProvider } from './context/AppContext.jsx'
 import App from './App.jsx'
 import './index.css'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>

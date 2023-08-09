@@ -12,7 +12,7 @@ export default function HomePage() {
               </h1>
               <h2>A world map that tracks your footsteps into every city you can think of. Never forget your wonderful experiences, and show your friends how you have wandered the world.</h2>
               <div>
-                 {state.user ? <Link to='/app' className="btn btn-green">start tracking now</Link>  : <Link to='/login' className="btn btn-green">start tracking now</Link> }
+                 {state.user?.uid ? <Link to='/app' className="btn btn-green">start tracking now</Link>  : <Link to='/login' className="btn btn-green">start tracking now</Link> }
                   
               </div>
           </section>

@@ -8,7 +8,7 @@ export default function MainNav() {
   return (
       <nav className={styles.nav}>
           <Link to='/'>
-                        <img src={logo} alt="logo" />
+                        <img src={logo} alt="logo" width="200" height="100"/>
 
           </Link>
           <ul>
@@ -22,7 +22,7 @@ export default function MainNav() {
                   product
               </NavLink>
               </li>
-              {!state.user && <li>
+              {!state.user?.uid && <li>
                      <NavLink to='/login'>
                   <Button type="green">
                       Login

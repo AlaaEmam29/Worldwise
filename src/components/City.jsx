@@ -11,15 +11,15 @@ export default function City() {
     const {id} = useParams() 
    
     const { state, handleBack, getCurrentCity  , formattedFullDate } = useAppContext()
-        const {state :authState} = useAuthContext()
+        const {state :authState } = useAuthContext()
 
     const { currentCity } = state
     useEffect(() => {
-        if (authState.user?.uid && state.cities) {
+        if (authState?.uid && state.cities) {
             getCurrentCity(id)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, authState.user?.uid, state.cities])
+    }, [id, authState?.uid, state.cities ])
   return (
       <>
         {

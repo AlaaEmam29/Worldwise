@@ -21,6 +21,7 @@
 
 .nav img {
   height: 6rem;
+  width: fit-content;
 }
 
 .nav ul {

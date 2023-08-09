@@ -1,10 +1,23 @@
-import React from 'react'
-import { useAppContext } from '../context/AppContext'
+import { useAppContext } from '../context/AppContext';
+import { memo } from 'react';
 
-export default function Flag(props) {
-    const { flag } = useAppContext()
-   const flagText = flag(props.flagInfo)
+const Flag = memo((props) => {
+  const { flag } = useAppContext();
+  const flagText = flag(props.flagInfo);
+
+  if (!flagText) return null;
+
   return (
-                <span><img src={`https://flagcdn.com/24x18/${flagText}.png`} alt={`flag ${flagText}`} /></span>
-  )
-}
+    <span>
+      <img
+        className='imgFlag'
+        src={`https://flagcdn.com/24x18/${flagText}.png`}
+        alt={`flag ${flagText}`}
+        width='200'
+        height='100'
+      />
+    </span>
+  );
+});
+
+export default Flag;

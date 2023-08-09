@@ -133,7 +133,9 @@ p{
   display: block;
   object-fit: cover;
 }
-
+.imgFlag{
+  height: 2.3rem !important;
+}
 @media screen and (max-width: 20em) {
   html{
     font-size: 45%;
@@ -173,8 +175,8 @@ height: 100%;
     html {
         font-size: 55%;
       }
-.row {
-  }}
+
+}
 
 /* Styles for large devices (between 60em and 80em) */
 @media screen and (min-width: 60em) and (max-width: 80em) {

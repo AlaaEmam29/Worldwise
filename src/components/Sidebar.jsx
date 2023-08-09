@@ -7,7 +7,7 @@ export default function Sidebar() {
   return (
       <aside className={styles.Sidebar}>
           <Link to='/'>
-                    <img src={logo} alt="logo" />
+                    <img src={logo} alt="logo"  width="200" height="100"/>
 
       </Link>
           <AppNav />

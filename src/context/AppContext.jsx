@@ -1,5 +1,5 @@
 /* eslint-disable no-loss-of-precision */
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useFirebaseContext } from './FirebaseContext.jsx';
@@ -122,7 +122,7 @@ export const AppContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initState)
 
     const { firebase } = useFirebaseContext()
-    const {state :authState} = useAuthContext()
+    const {state :authState } = useAuthContext()
     const navigate = useNavigate()
    function generateUniqueId() {
   return uuidv4();
@@ -130,61 +130,63 @@ export const AppContextProvider = ({ children }) => {
 
 
   
-  let unsubscribeFetchCities = null; 
-    
-      const fetchCitiesBasedOnUser = async () => {
-    try {
-      dispatch({ type: initType.loading, payload: true });
-      unsubscribeFetchCities = await firebase.doGetUserDataFromFirestore('cities', (data) => {
-        const { cities } = data;
-        dispatch({ type: initType.addCitiesToUser, payload: cities });
-      });
-    } catch (error) {
-      console.error(error.message);
-      dispatch({ type: initType.error, payload: error.message });
-    } finally {
-      dispatch({ type: initType.loading, payload: false });
-    }
 
-    return unsubscribeFetchCities;
-  };
+const fetchCitiesBasedOnUser = useCallback(async () => {
+  try {
+    dispatch({ type: initType.loading, payload: true });
+     await firebase.doGetUserDataFromFirestore('cities', (data) => {
+      const { cities } = data;
+      dispatch({ type: initType.addCitiesToUser, payload: cities });
+    });
+  } catch (error) {
+    console.error(error.message);
+    dispatch({ type: initType.error, payload: error.message });
+  } finally {
+    dispatch({ type: initType.loading, payload: false });
+  }
 
-  useEffect(() => {
-    if (authState.user?.uid) {
-      const unsubscribe = fetchCitiesBasedOnUser();
+} , [state ])
 
-      return () => {
-        if (unsubscribe instanceof Function) {
-          unsubscribe();
-        }
-      };
-    } else {
-      dispatch({ type: initType.loading, payload: true });
-    }
-  }, [authState.user?.uid ]);
+useEffect(() => {
+  if (authState.user?.uid) {
+    const unsubscribe = fetchCitiesBasedOnUser();
+
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  } else {
+    dispatch({ type: initType.loading, payload: true });
+  }
+}, [authState.user?.uid]);
+
 
 
     
    
-    const handleBack = (e , path) => {
+    const handleBack =useCallback( (e , path) => {
         e.preventDefault()
         navigate(path ,  {replace :true})
         
-    }
-  const handleChangeInputMapForm = (e) => {
-        dispatch({type : e.target.name , payload:e.target.value})
-  }
-  const handleChangeInputMapFormWhenClick = (state , value) => {
-        dispatch({type : state , payload:value})
-    }
-  const getCurrentCity = (id) => {
-    console.log(id , state.currentCity.id)
+    } ,[])
+    
+    const handleChangeInputMapForm = useCallback((e) => {
+      dispatch({ type: e.target.name, payload: e.target.value });
+    }, []); 
+  
+    const handleChangeInputMapFormWhenClick = useCallback((state, value) => {
+      dispatch({ type: state, payload: value });
+    }, []); 
+  
+
+  const getCurrentCity = useCallback((id) => {
     if (id === state.currentCity.id) return
     
         const city = state.cities.find((city) => city.id === id)
         dispatch({type : initType.currentCity , payload:city})
 
-    }
+    } , [state.cities, state.currentCity.id])
      const handleUpdatePosition = (currPosition) => {
         dispatch({type : initType.updatePosition , payload:currPosition})
 
@@ -197,7 +199,7 @@ export const AppContextProvider = ({ children }) => {
 
 
 
-  const handleAddNewCities = async (e) => {
+  const handleAddNewCities = useCallback(async (e) => {
       e.preventDefault();
       
     const { cityName, country, emoji, date, notes, mapPosition , cities } = state;
@@ -244,12 +246,11 @@ export const AppContextProvider = ({ children }) => {
       }
 
   
-    };
+    } , [state])
     
-        const handleLogOut = async () => {
+        const handleLogOut = useCallback(async () => {
         try {
             await firebase.doSignOut()
-            localStorage.removeItem("userID")
             dispatch({ type: initType.logout })
             navigate("/")
 
@@ -258,8 +259,8 @@ export const AppContextProvider = ({ children }) => {
 dispatch({ type: initType.error, payload: "Something went wrong when you tried to log out." })
 
         }
-  }
-  const handleDeleteCity = async (e, id) => {
+  } ,[])
+  const handleDeleteCity =useCallback( async (e, id) => {
     e.preventDefault()
 
     try {
@@ -272,18 +273,18 @@ dispatch({ type: initType.error, payload: "Something went wrong when deleting th
 
     }
     
-  }
+  } ,[state])
 const formattedFullDate = (date) => moment(date).format("dddd, MMMM DD YYYY")
     const flag = (emoji) => String(emoji).toLowerCase()
+const appObject = useMemo(() => {return {
+  state, handleBack, handleChangeInputMapForm,
+  getCurrentCity, handleUpdatePosition,
+  handleMoveToYourPosition, handleAddNewCities,
+  handleLogOut , formattedFullDate , handleChangeInputMapFormWhenClick,flag , handleDeleteCity
+}}, [state, handleBack, handleChangeInputMapForm, getCurrentCity, handleAddNewCities, handleLogOut, handleChangeInputMapFormWhenClick, handleDeleteCity])
 
 
-    return <AppContext.Provider value={{
-        state, handleBack, handleChangeInputMapForm,
-        getCurrentCity, handleUpdatePosition,
-        handleMoveToYourPosition, handleAddNewCities,
-        handleLogOut , formattedFullDate , handleChangeInputMapFormWhenClick,flag , handleDeleteCity
-       
-    }}>
+    return <AppContext.Provider value={appObject}>
         {children}
     </AppContext.Provider>
 }

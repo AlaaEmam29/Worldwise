@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from "react";
 import { useNavigate } from "react-router";
 import * as Yup from 'yup';
 import { useFirebaseContext } from "./FirebaseContext";
@@ -81,6 +81,8 @@ export const AuthContextProvider = ({ children }) => {
     
     const { firebase } = useFirebaseContext()
     const navigate = useNavigate()
+    const memoizedUserDispatch = useMemo(() => dispatch, []);
+
     const validationSchema = Yup.object().shape({
    name: Yup.string()
      .min(2, 'Too Short! Must be at least 2 characters')
@@ -105,30 +107,31 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = firebase.doOnAuthStateChanged((user) => {
             if (user) {
-                dispatch({ type: initType.user, payload: user })
+                memoizedUserDispatch({ type: initType.user, payload: user })
 
                             }
             else {
-dispatch({type : initType.user , payload : null})
+                memoizedUserDispatch({type : initType.user , payload : null})
 
             }
         })
     return () => unsubscribe();
-    }, [firebase])
+    }, [firebase, memoizedUserDispatch])
+
     useEffect(() => {
-        if (state.user?.uid) {
-         localStorage.setItem("userID" , state.user?.uid)
-
-        }
-    } , [state.user?.uid])
-
+      if (state.user?.uid) {
+        navigate("/app/cities" , {replace :true})
     
+        }
+      
+    }, [state.user?.uid])
+  
 
     const handleChangeInput = async (e) => {
         const { name, value } = e.target;       
             dispatch({type : name , payload : value})
     }
-    const handleSubmitRegister = async (e) => {
+    const handleSubmitRegister =useCallback( async (e) => {
         e.preventDefault()
   try {
     await validationSchema.validate(state, { abortEarly: false });
@@ -152,8 +155,8 @@ dispatch({type : initType.user , payload : null})
       dispatch({ type: initType.error, payload: newErrors });
     }
   }
-    };
-        const handleSubmitLogin = async (e) => {
+    }  , [])
+        const handleSubmitLogin =useCallback( async (e) => {
             e.preventDefault()
   try {
       const { email, password } = state;
@@ -179,29 +182,25 @@ dispatch({type : initType.user , payload : null})
                     dispatch({type : initType.restRegisterSuccessful })
 
             }
-    };
+    } , [])
 
-    const handleGoogleLoginIn = async () => {
+    const handleGoogleLoginIn =useCallback( async () => {
         try {
-            await firebase.doSignInWithPopupGoogle()
-                
-                navigate("/app")
-       
-
+          await firebase.doSignInWithPopupGoogle()
+        navigate("/app")       
         }
         catch (error) {
         dispatch({ type: initType.errorFirebase, payload: error.message });
 
         }
-    }
-
-    return <AuthContext.Provider value={{
-        handleChangeInput,
-        handleSubmitRegister,
-        handleSubmitLogin,
-        state,
-        handleGoogleLoginIn
-    }}>
+    } , [])
+const authObj = useMemo(() => {return {handleChangeInput,
+    handleSubmitRegister,
+    handleSubmitLogin,
+    state,
+    handleGoogleLoginIn,
+}}, [handleGoogleLoginIn, handleSubmitLogin, handleSubmitRegister, state])
+    return <AuthContext.Provider value={authObj}>
         {children}
     </AuthContext.Provider>
 }

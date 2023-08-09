@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState  , memo} from 'react'
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from "react-leaflet";
 import { useAppContext } from '../context/AppContext';
@@ -9,13 +9,14 @@ import styles from './Map.module.css'
 import { useUrlPosition } from '../hooks/useUrlPosition';
 import Flag from './Flag';
 
-function UpdateCenter  ({position}) {
+const UpdateCenter = memo(  ({position}) =>{
   const map = useMap()
   map.flyTo(position, map.getZoom(16))
   return null
 
 }
-function NavigateToForm() {
+)
+const NavigateToForm = memo(()=> {
   const navigate = useNavigate()
  
  useMapEvents({
@@ -29,6 +30,7 @@ function NavigateToForm() {
   
 
 }
+)
 export default function Map() {
   const { state , handleUpdatePosition , handleMoveToYourPosition     } = useAppContext()
   const [lat, lng] = useUrlPosition()
