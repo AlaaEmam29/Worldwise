@@ -178,12 +178,3 @@ height: 100%;
 
 }
 
-/* Styles for large devices (between 60em and 80em) */
-@media screen and (min-width: 60em) and (max-width: 80em) {
-  /* Your styles for large devices here */
-}
-
-/* Styles for very large devices (greater than 80em) */
-@media screen and (min-width: 80em) {
-  /* Your styles for very large devices here */
-}
